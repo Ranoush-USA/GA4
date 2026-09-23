@@ -1,0 +1,41 @@
+# Declarative Automation Bundle configuration, more info here: https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "GA4"
+
+include:
+       - resources/jobs/*.yml
+       - resources/pipelines/*.yml
+       - resources/notebooks/*.yml
+
+variables:
+  catalog:
+    default: workspace
+  bronze_schema:
+    default: bronze
+  silver_schema:
+    default: silver
+  gold_schema:
+    default: gold
+
+targets:
+  # The 'dev' target, for development purposes. This target is the default.
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-c96a283d-ad26.cloud.databricks.com
+
+  # The 'prod' target, used for production deployment.
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-c96a283d-ad26.cloud.databricks.com
+      # We always use /Users/rana@ghazzi.com for all resources to make sure we only have a single copy.
+      root_path: /Users/rana@ghazzi.com/.bundle/${bundle.name}/${bundle.target}
+
+run_as:
+  user_name: rana@ghazzi.com
+
+permissions:
+  - user_name: rana@ghazzi.com
+    level: CAN_MANAGE

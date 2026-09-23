@@ -1,0 +1,22 @@
+resources:
+  jobs:
+    GA4:
+      name: GA4_Job
+      tasks:
+        - task_key: GA4-Silver
+          notebook_task:
+            notebook_path: ../notebooks/GA4-Silver.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+              bronze_schema: ${var.bronze_schema}
+              silver_schema: ${var.silver_schema}
+
+        - task_key: GA4-Gold
+          depends_on:
+            - task_key: GA4-Silver
+          notebook_task:
+            notebook_path: ../notebooks/GA4-Gold.ipynb
+            base_parameters:
+              catalog: ${var.catalog}
+              silver_schema: ${var.silver_schema}
+              gold_schema: ${var.gold_schema}
